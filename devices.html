@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAH TV — Estudio Multidispositivo (Móvil, Tablet y PC)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --bg: #0d0407;
+    --card: #190a0f;
+    --card-2: #240e16;
+    --line: rgba(255,255,255,0.12);
+    --accent: #E0314B;
+    --accent-soft: rgba(224,49,75,0.18);
+    --text: #f6eaeb;
+    --text-2: #ab8e93;
+    --font: 'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+  }
+
+  /* Top Control Bar */
+  header.studio-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,4,7,0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-group .logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid var(--accent);
+    display: grid;
+    place-items: center;
+  }
+  .brand-group .logo svg { width: 20px; height: 20px; }
+  .brand-group h1 { font-size: 16px; font-weight: 700; }
+  .brand-group span { font-size: 11.5px; color: var(--text-2); }
+
+  .actions-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    border: 1px solid var(--line);
+    background: var(--card-2);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  .btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn.primary:hover {
+    box-shadow: 0 4px 16px -4px var(--accent);
+  }
+
+  /* Scale Zoom Controls */
+  .zoom-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text-2);
+  }
+  .zoom-control input[type="range"] {
+    accent-color: var(--accent);
+    width: 90px;
+    cursor: pointer;
+  }
+
+  /* Workspace Container */
+  .studio-viewport {
+    flex: 1;
+    padding: 30px 24px 60px;
+    display: flex;
+    gap: 36px;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  /* Device Column Card */
+  .device-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+  }
+
+  .device-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 6px;
+  }
+  .device-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .device-res {
+    font-size: 11px;
+    color: var(--text-2);
+    background: var(--card-2);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  /* Device Mockup Shells */
+  .device-frame {
+    background: #000;
+    border-radius: 36px;
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 10px #220b12, 0 0 0 12px rgba(255,255,255,0.15);
+    overflow: hidden;
+    position: relative;
+    transform-origin: top center;
+    transition: transform 0.2s ease;
+  }
+
+  .device-frame.mobile {
+    width: 390px;
+    height: 844px;
+    border-radius: 46px;
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 11px #1f0b12, 0 0 0 13px rgba(255,255,255,0.18);
+  }
+  .device-frame.mobile .notch {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 26px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .device-frame.tablet {
+    width: 768px;
+    height: 1024px;
+    border-radius: 32px;
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 12px #1f0b12, 0 0 0 14px rgba(255,255,255,0.18);
+  }
+
+  .device-frame.desktop {
+    width: 1280px;
+    height: 800px;
+    border-radius: 16px;
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.8), 0 0 0 8px #1f0b12, 0 0 0 10px rgba(255,255,255,0.18);
+  }
+  .device-frame.desktop .mac-bar {
+    height: 32px;
+    background: #1a080e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mac-dot.red { background: #ff5f56; }
+  .mac-dot.yellow { background: #ffbd2e; }
+  .mac-dot.green { background: #27c93f; }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #120307;
+  }
+  .device-frame.desktop iframe {
+    height: calc(100% - 32px);
+  }
+</style>
+</head>
+<body>
+
+<header class="studio-bar">
+  <div class="brand-group">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="var(--accent)" stroke="none" aria-hidden="true"><path d="M12 2.5c0 0-6.5 7.4-6.5 11.6a6.5 6.5 0 0 0 13 0C18.5 9.9 12 2.5 12 2.5z"/></svg>
+    </div>
+    <div>
+      <h1>SAH TV — Responsive Multi-Device Studio</h1>
+      <span>Comparación en tiempo real: Móvil (390px), Tablet (768px) y PC (1280px)</span>
+    </div>
+  </div>
+
+  <div class="actions-group">
+    <div class="zoom-control">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span>Escala:</span>
+      <input type="range" id="zoomSlider" min="0.4" max="1" step="0.05" value="0.75">
+      <span id="zoomVal">75%</span>
+    </div>
+
+    <button class="btn" id="btnReloadAll" title="Recargar las 3 pantallas"><i class="fa-solid fa-rotate-right"></i> Recargar todo</button>
+    <button class="btn primary" id="btnOpenThreeWindows" title="Abrir 3 ventanas flotantes independientes"><i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir 3 Ventanas Separadas</button>
+  </div>
+</header>
+
+<main class="studio-viewport" id="viewportContainer">
+  
+  <!-- 📱 1. VISTA MÓVIL (iPhone 15 Pro) -->
+  <div class="device-column">
+    <div class="device-header">
+      <div class="device-title"><i class="fa-solid fa-mobile-screen"></i> Smartphone Móvil</div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="device-res">390 × 844</span>
+        <button class="btn" onclick="openWindow(410, 880, 'mobile')"><i class="fa-solid fa-up-right-from-square"></i> Ventana</button>
+      </div>
+    </div>
+    <div class="device-frame mobile" id="frameMobile">
+      <div class="notch"></div>
+      <iframe src="/" id="iframeMobile" title="Vista Móvil"></iframe>
+    </div>
+  </div>
+
+  <!-- 📲 2. VISTA TABLET (iPad) -->
+  <div class="device-column">
+    <div class="device-header">
+      <div class="device-title"><i class="fa-solid fa-tablet-screen-button"></i> Tablet</div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="device-res">768 × 1024</span>
+        <button class="btn" onclick="openWindow(800, 1060, 'tablet')"><i class="fa-solid fa-up-right-from-square"></i> Ventana</button>
+      </div>
+    </div>
+    <div class="device-frame tablet" id="frameTablet">
+      <iframe src="/" id="iframeTablet" title="Vista Tablet"></iframe>
+    </div>
+  </div>
+
+  <!-- 💻 3. VISTA DESKTOP PC -->
+  <div class="device-column">
+    <div class="device-header">
+      <div class="device-title"><i class="fa-solid fa-display"></i> PC Desktop</div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="device-res">1280 × 800</span>
+        <button class="btn" onclick="openWindow(1300, 860, 'desktop')"><i class="fa-solid fa-up-right-from-square"></i> Ventana</button>
+      </div>
+    </div>
+    <div class="device-frame desktop" id="frameDesktop">
+      <div class="mac-bar">
+        <div class="mac-dot red"></div>
+        <div class="mac-dot yellow"></div>
+        <div class="mac-dot green"></div>
+      </div>
+      <iframe src="/" id="iframeDesktop" title="Vista PC Desktop"></iframe>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Control de Zoom
+  const slider = document.getElementById('zoomSlider');
+  const zoomVal = document.getElementById('zoomVal');
+  const frames = [
+    document.getElementById('frameMobile'),
+    document.getElementById('frameTablet'),
+    document.getElementById('frameDesktop')
+  ];
+
+  function applyZoom(val) {
+    frames.forEach(f => {
+      if(f) f.style.transform = `scale(${val})`;
+    });
+    zoomVal.textContent = `${Math.round(val * 100)}%`;
+  }
+
+  slider.oninput = (e) => applyZoom(e.target.value);
+  applyZoom(slider.value);
+
+  // Recargar todas las vistas
+  document.getElementById('btnReloadAll').onclick = () => {
+    ['iframeMobile', 'iframeTablet', 'iframeDesktop'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.src = el.src;
+    });
+  };
+
+  // Abrir ventana emergente con dimensiones exactas
+  function openWindow(w, h, name) {
+    const left = (screen.width - w) / 2;
+    const top = (screen.height - h) / 2;
+    window.open('/', `sah_${name}_${Date.now()}`, `width=${w},height=${h},top=${top},left=${left},scrollbars=yes,resizable=yes`);
+  }
+
+  // Abrir las 3 ventanas simultáneamente
+  document.getElementById('btnOpenThreeWindows').onclick = () => {
+    openWindow(410, 880, 'mobile');
+    setTimeout(() => openWindow(800, 1060, 'tablet'), 250);
+    setTimeout(() => openWindow(1300, 860, 'desktop'), 500);
+  };
+</script>
+
+</body>
+</html>
